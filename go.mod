@@ -7,12 +7,12 @@ require (
 	github.com/getsentry/raven-go v0.2.0
 	github.com/getsentry/sentry-go v0.2.1
 	github.com/go-chi/chi v4.0.2+incompatible
+	github.com/go-pkgz/rest v1.4.1
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/influxdata/influxdb1-client v0.0.0-20190402204710-8ff2fc3824fc
 	github.com/jessevdk/go-flags v1.4.0
-	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/thedevsaddam/govalidator v1.9.8
 	github.com/tidwall/pretty v1.0.0 // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect

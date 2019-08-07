@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
+	"github.com/Quard/authority/internal/session"
 	"github.com/Quard/authority/internal/user"
 )
 
@@ -65,6 +66,17 @@ func (s MongoStorage) GetUserByEmail(email string) (user.User, error) {
 	}
 
 	return user, nil
+}
+
+func (s MongoStorage) AddSession(session session.Session) error {
+	sessionCollection := s.conn.Collection("session")
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	_, err := sessionCollection.InsertOne(ctx, bson.M{"auth_token": session.AuthToken, "user_id": session.User.ID})
+	if err != nil {
+		sentry.CaptureException(err)
+		return err
+	}
+	return nil
 }
 
 func convToInsertDocument(val interface{}) (bson.M, error) {
