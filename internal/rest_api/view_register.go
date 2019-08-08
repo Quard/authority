@@ -2,7 +2,6 @@ package rest_api
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/thedevsaddam/govalidator"
 
@@ -44,8 +43,8 @@ func (srv RestAPIServer) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerUser(storage storage.Storage, email, password string) error {
-	user := user.User{Email: email, DateJoined: time.Now()}
-	if err := user.SetPassword(password); err != nil {
+	user, err := user.NewUser(email, password)
+	if err != nil {
 		return err
 	}
 

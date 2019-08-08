@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/Quard/authority/internal/session"
 	"github.com/Quard/authority/internal/user"
 )
 
@@ -50,11 +49,27 @@ func (s MongoStorage) AddUser(user user.User) error {
 	return nil
 }
 
+func (s MongoStorage) GetUserByID(ID string) (user.User, error) {
+	return s.getUserByFilter(bson.M{"_id": ID})
+}
+
 func (s MongoStorage) GetUserByEmail(email string) (user.User, error) {
+	return s.getUserByFilter(bson.M{"email": email})
+}
+
+func (s MongoStorage) GetUserBySession(authToken string) (user.User, error) {
+	return s.getUserByFilter(bson.M{
+		"sessions": bson.M{
+			"$elemMatch": bson.M{"authtoken": authToken},
+		},
+	})
+}
+
+func (s MongoStorage) getUserByFilter(filter bson.M) (user.User, error) {
 	var user user.User
 	userCollection := s.conn.Collection("user")
 	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
-	findResult := userCollection.FindOne(ctx, bson.M{"email": email})
+	findResult := userCollection.FindOne(ctx, filter)
 	findResultErr := findResult.Err()
 	if findResultErr != nil {
 		sentry.CaptureException(findResultErr)
@@ -68,10 +83,29 @@ func (s MongoStorage) GetUserByEmail(email string) (user.User, error) {
 	return user, nil
 }
 
-func (s MongoStorage) AddSession(session session.Session) error {
-	sessionCollection := s.conn.Collection("session")
+func (s MongoStorage) AddSession(user user.User, session user.Session) error {
+	userCollection := s.conn.Collection("user")
 	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
-	_, err := sessionCollection.InsertOne(ctx, bson.M{"auth_token": session.AuthToken, "user_id": session.User.ID})
+	_, err := userCollection.UpdateOne(
+		ctx,
+		bson.M{"_id": user.ID},
+		bson.M{"$push": bson.M{"sessions": session}},
+	)
+	if err != nil {
+		sentry.CaptureException(err)
+		return err
+	}
+	return nil
+}
+
+func (s MongoStorage) SetUserProp(user user.User, name, value string) error {
+	userCollection := s.conn.Collection("user")
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	_, err := userCollection.UpdateOne(
+		ctx,
+		bson.M{"_id": user.ID},
+		bson.M{"$set": bson.M{"props." + name: value}},
+	)
 	if err != nil {
 		sentry.CaptureException(err)
 		return err

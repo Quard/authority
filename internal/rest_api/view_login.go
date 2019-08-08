@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Quard/authority/internal/session"
 	"github.com/Quard/authority/internal/storage"
 	"github.com/Quard/authority/internal/user"
 	"github.com/thedevsaddam/govalidator"
@@ -39,7 +38,7 @@ func (srv RestAPIServer) Login(w http.ResponseWriter, r *http.Request) {
 	if len(validationError) > 0 {
 		responseValidationError(w, validationError)
 	} else {
-		session, err := login(
+		user, session, err := login(
 			srv.storage,
 			requestData.Email,
 			requestData.Password,
@@ -49,37 +48,39 @@ func (srv RestAPIServer) Login(w http.ResponseWriter, r *http.Request) {
 		} else {
 			resp := loginResponse{
 				AuthToken: session.AuthToken,
-				UserName:  session.User.Name,
+				UserName:  user.Name,
 			}
 			json.NewEncoder(w).Encode(resp)
 		}
 	}
 }
 
-func login(stor storage.Storage, email, password string) (session.Session, error) {
-	var userSession session.Session
+func login(stor storage.Storage, email, password string) (user.User, user.Session, error) {
+	var currentUser user.User
+	var userSession user.Session
 
-	currentUser, err := stor.GetUserByEmail(email)
+	var err error
+	currentUser, err = stor.GetUserByEmail(email)
 	if err != nil && err != storage.ErrUserNotFound {
-		return userSession, errors.New("unable to login")
+		return currentUser, userSession, errors.New("unable to login")
 	}
 	if err == storage.ErrUserNotFound {
-		return userSession, errors.New("such email not registered in application")
+		return currentUser, userSession, errors.New("such email not registered in application")
 	}
 
 	passwd := user.HashPassword(currentUser.Salt, []byte(password))
 	if !bytes.Equal(passwd, currentUser.Password) {
 		log.Printf("pwd equal: %x & %x", passwd, currentUser.Password)
-		return userSession, errors.New("wrong email or password")
+		return currentUser, userSession, errors.New("wrong email or password")
 	}
 
-	userSession, err = session.CreateSession(currentUser)
+	userSession, err = currentUser.CreateSession()
 	if err != nil {
-		return userSession, errors.New("unable to login")
+		return currentUser, userSession, errors.New("unable to login")
 	}
-	if err := stor.AddSession(userSession); err != nil {
-		return userSession, errors.New("unable to login")
+	if err := stor.AddSession(currentUser, userSession); err != nil {
+		return currentUser, userSession, errors.New("unable to login")
 	}
 
-	return userSession, nil
+	return currentUser, userSession, nil
 }

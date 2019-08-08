@@ -16,6 +16,23 @@ type User struct {
 	Salt       []byte             `bson:"salt"`
 	Password   []byte             `bson:"password"`
 	DateJoined time.Time          `json:"date_joined"`
+	Sessions   []Session          `bson:"sessions"`
+	Props      map[string]string  `bson:"props"`
+}
+
+func NewUser(email, password string) (User, error) {
+	user := User{
+		Email:      email,
+		DateJoined: time.Now(),
+		Sessions:   []Session{},
+		Props:      map[string]string{},
+	}
+	if err := user.SetPassword(password); err != nil {
+		sentry.CaptureException(err)
+		return user, err
+	}
+
+	return user, nil
 }
 
 func (u *User) SetPassword(password string) error {
