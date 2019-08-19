@@ -45,12 +45,17 @@ func (srv RestAPIServer) Run() {
 
 func (srv RestAPIServer) getRouter() chi.Router {
 	router := chi.NewRouter()
+	router.Get("/", srv.healthCheck)
 	router.Route("/api/v1/auth", func(r chi.Router) {
 		r.Post("/register/", srv.Register)
 		r.Post("/login/", srv.Login)
 	})
 
 	return router
+}
+
+func (srv RestAPIServer) healthCheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
 
 func (srv RestAPIServer) initCustomValidators() {

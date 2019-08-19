@@ -4,6 +4,7 @@ package internal_api;
 
 service InternalAPI {
   rpc GetUserByAuthToken(AuthToken) returns (User) {}
+  rpc GetUserByProp(UserProp) returns (User) {}
   rpc SetUserProps(UserProps) returns (Error) {}
 }
 
@@ -12,7 +13,7 @@ message AuthToken {
 }
 
 message User {
-  string id = 1;
+  string ID = 1;
   string email = 2;
   string name = 3;
 }
@@ -22,16 +23,16 @@ message Error {
   string msg = 2;
 }
 
+message UserProp {
+  string name = 1;
+  string value = 2;
+}
+
 message UserProps {
   oneof user {
     string id = 1;
     string authToken = 2;
   }
 
-  message Prop {
-    string name = 1;
-    string value = 2;
-  }
-
-  repeated Prop props = 5;
+  repeated UserProp props = 5;
 }

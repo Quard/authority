@@ -11,9 +11,18 @@ import (
 func (srv internalAPIServer) GetUserByAuthToken(ctx context.Context, authToken *AuthToken) (*User, error) {
 	authUser, err := srv.storage.GetUserBySession(authToken.GetAuthToken())
 	if err != nil {
-		return &User{}, err
+		return nil, err
 	}
-	return &User{Email: authUser.Email, Name: authUser.Name}, nil
+	return &User{ID: authUser.ID.Hex(), Email: authUser.Email, Name: authUser.Name}, nil
+}
+
+func (srv internalAPIServer) GetUserByProp(ctx context.Context, prop *UserProp) (*User, error) {
+	authUser, err := srv.storage.GetUserByProp(prop.GetName(), prop.GetValue())
+	if err != nil {
+		return nil, err
+	}
+
+	return &User{ID: authUser.ID.Hex(), Email: authUser.Email, Name: authUser.Name}, nil
 }
 
 func (srv internalAPIServer) SetUserProps(ctx context.Context, userProps *UserProps) (*Error, error) {

@@ -20,7 +20,7 @@ type MongoStorage struct {
 }
 
 func NewMongoStorage(uri string) MongoStorage {
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +34,7 @@ func NewMongoStorage(uri string) MongoStorage {
 
 func (s MongoStorage) AddUser(user user.User) error {
 	userCollection := s.conn.Collection("user")
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	document, errConv := convToInsertDocument(user)
 	if errConv != nil {
 		sentry.CaptureException(errConv)
@@ -57,6 +57,11 @@ func (s MongoStorage) GetUserByEmail(email string) (user.User, error) {
 	return s.getUserByFilter(bson.M{"email": email})
 }
 
+func (s MongoStorage) GetUserByProp(name, value string) (user.User, error) {
+	propName := "props." + name
+	return s.getUserByFilter(bson.M{propName: value})
+}
+
 func (s MongoStorage) GetUserBySession(authToken string) (user.User, error) {
 	return s.getUserByFilter(bson.M{
 		"sessions": bson.M{
@@ -68,7 +73,7 @@ func (s MongoStorage) GetUserBySession(authToken string) (user.User, error) {
 func (s MongoStorage) getUserByFilter(filter bson.M) (user.User, error) {
 	var user user.User
 	userCollection := s.conn.Collection("user")
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	findResult := userCollection.FindOne(ctx, filter)
 	findResultErr := findResult.Err()
 	if findResultErr != nil {
@@ -85,7 +90,7 @@ func (s MongoStorage) getUserByFilter(filter bson.M) (user.User, error) {
 
 func (s MongoStorage) AddSession(user user.User, session user.Session) error {
 	userCollection := s.conn.Collection("user")
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := userCollection.UpdateOne(
 		ctx,
 		bson.M{"_id": user.ID},
@@ -100,7 +105,7 @@ func (s MongoStorage) AddSession(user user.User, session user.Session) error {
 
 func (s MongoStorage) SetUserProp(user user.User, name, value string) error {
 	userCollection := s.conn.Collection("user")
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := userCollection.UpdateOne(
 		ctx,
 		bson.M{"_id": user.ID},

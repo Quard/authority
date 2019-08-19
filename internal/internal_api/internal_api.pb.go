@@ -64,7 +64,7 @@ func (m *AuthToken) GetAuthToken() string {
 }
 
 type User struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ID                   string   `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 	Email                string   `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -97,9 +97,9 @@ func (m *User) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_User proto.InternalMessageInfo
 
-func (m *User) GetId() string {
+func (m *User) GetID() string {
 	if m != nil {
-		return m.Id
+		return m.ID
 	}
 	return ""
 }
@@ -165,22 +165,69 @@ func (m *Error) GetMsg() string {
 	return ""
 }
 
+type UserProp struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UserProp) Reset()         { *m = UserProp{} }
+func (m *UserProp) String() string { return proto.CompactTextString(m) }
+func (*UserProp) ProtoMessage()    {}
+func (*UserProp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_927ea7049a2d0eaa, []int{3}
+}
+
+func (m *UserProp) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UserProp.Unmarshal(m, b)
+}
+func (m *UserProp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UserProp.Marshal(b, m, deterministic)
+}
+func (m *UserProp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserProp.Merge(m, src)
+}
+func (m *UserProp) XXX_Size() int {
+	return xxx_messageInfo_UserProp.Size(m)
+}
+func (m *UserProp) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserProp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UserProp proto.InternalMessageInfo
+
+func (m *UserProp) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UserProp) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
 type UserProps struct {
 	// Types that are valid to be assigned to User:
 	//	*UserProps_Id
 	//	*UserProps_AuthToken
-	User                 isUserProps_User  `protobuf_oneof:"user"`
-	Props                []*UserProps_Prop `protobuf:"bytes,5,rep,name=props,proto3" json:"props,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	User                 isUserProps_User `protobuf_oneof:"user"`
+	Props                []*UserProp      `protobuf:"bytes,5,rep,name=props,proto3" json:"props,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *UserProps) Reset()         { *m = UserProps{} }
 func (m *UserProps) String() string { return proto.CompactTextString(m) }
 func (*UserProps) ProtoMessage()    {}
 func (*UserProps) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927ea7049a2d0eaa, []int{3}
+	return fileDescriptor_927ea7049a2d0eaa, []int{4}
 }
 
 func (m *UserProps) XXX_Unmarshal(b []byte) error {
@@ -238,7 +285,7 @@ func (m *UserProps) GetAuthToken() string {
 	return ""
 }
 
-func (m *UserProps) GetProps() []*UserProps_Prop {
+func (m *UserProps) GetProps() []*UserProp {
 	if m != nil {
 		return m.Props
 	}
@@ -253,84 +300,38 @@ func (*UserProps) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-type UserProps_Prop struct {
-	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *UserProps_Prop) Reset()         { *m = UserProps_Prop{} }
-func (m *UserProps_Prop) String() string { return proto.CompactTextString(m) }
-func (*UserProps_Prop) ProtoMessage()    {}
-func (*UserProps_Prop) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927ea7049a2d0eaa, []int{3, 0}
-}
-
-func (m *UserProps_Prop) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UserProps_Prop.Unmarshal(m, b)
-}
-func (m *UserProps_Prop) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UserProps_Prop.Marshal(b, m, deterministic)
-}
-func (m *UserProps_Prop) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UserProps_Prop.Merge(m, src)
-}
-func (m *UserProps_Prop) XXX_Size() int {
-	return xxx_messageInfo_UserProps_Prop.Size(m)
-}
-func (m *UserProps_Prop) XXX_DiscardUnknown() {
-	xxx_messageInfo_UserProps_Prop.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UserProps_Prop proto.InternalMessageInfo
-
-func (m *UserProps_Prop) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *UserProps_Prop) GetValue() string {
-	if m != nil {
-		return m.Value
-	}
-	return ""
-}
-
 func init() {
 	proto.RegisterType((*AuthToken)(nil), "internal_api.AuthToken")
 	proto.RegisterType((*User)(nil), "internal_api.User")
 	proto.RegisterType((*Error)(nil), "internal_api.Error")
+	proto.RegisterType((*UserProp)(nil), "internal_api.UserProp")
 	proto.RegisterType((*UserProps)(nil), "internal_api.UserProps")
-	proto.RegisterType((*UserProps_Prop)(nil), "internal_api.UserProps.Prop")
 }
 
 func init() { proto.RegisterFile("internal_api.proto", fileDescriptor_927ea7049a2d0eaa) }
 
 var fileDescriptor_927ea7049a2d0eaa = []byte{
-	// 296 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x51, 0x4d, 0x4b, 0xc3, 0x40,
-	0x14, 0x6c, 0xbe, 0x8a, 0x79, 0x2d, 0x52, 0x9e, 0x42, 0x43, 0x28, 0x52, 0xf6, 0x54, 0x0f, 0x06,
-	0x89, 0x77, 0xb1, 0x15, 0xd1, 0x9e, 0x2c, 0x51, 0xcf, 0xb2, 0xd2, 0x45, 0x97, 0xe6, 0x8b, 0xdd,
-	0x44, 0xf0, 0x6f, 0xf8, 0x37, 0xfc, 0x93, 0xb2, 0x9b, 0x34, 0xdb, 0x20, 0x5e, 0xc2, 0x7b, 0x33,
-	0xc9, 0xcc, 0xbc, 0x09, 0x20, 0xcf, 0x2b, 0x26, 0x72, 0x9a, 0xbe, 0xd2, 0x92, 0x47, 0xa5, 0x28,
-	0xaa, 0x02, 0xc7, 0x87, 0x18, 0x39, 0x07, 0x7f, 0x59, 0x57, 0x1f, 0xcf, 0xc5, 0x8e, 0xe5, 0x38,
-	0x03, 0x9f, 0xee, 0x97, 0xc0, 0x9a, 0x5b, 0x0b, 0x3f, 0x31, 0x00, 0xb9, 0x01, 0xf7, 0x45, 0x32,
-	0x81, 0xc7, 0x60, 0xf3, 0x6d, 0x4b, 0xdb, 0x7c, 0x8b, 0xa7, 0xe0, 0xb1, 0x8c, 0xf2, 0x34, 0xb0,
-	0x35, 0xd4, 0x2c, 0x88, 0xe0, 0xe6, 0x34, 0x63, 0x81, 0xa3, 0x41, 0x3d, 0x93, 0x0b, 0xf0, 0xee,
-	0x84, 0x28, 0x84, 0x22, 0xb9, 0x7c, 0xdc, 0x69, 0x91, 0xa3, 0x44, 0xcf, 0x38, 0x01, 0x27, 0x93,
-	0xef, 0xad, 0x88, 0x1a, 0xc9, 0x8f, 0x05, 0xbe, 0x72, 0xdc, 0x88, 0xa2, 0x94, 0x38, 0x31, 0xb6,
-	0x0f, 0x03, 0x6d, 0x7c, 0x76, 0x18, 0xd7, 0x6e, 0x09, 0x03, 0x61, 0x0c, 0x5e, 0xa9, 0x3e, 0x0d,
-	0xbc, 0xb9, 0xb3, 0x18, 0xc5, 0xb3, 0xa8, 0xd7, 0x46, 0xa7, 0x1c, 0xa9, 0x67, 0xd2, 0xbc, 0x1a,
-	0x5e, 0x82, 0xab, 0xd6, 0x2e, 0xbe, 0x65, 0xe2, 0xab, 0x43, 0x3f, 0x69, 0x5a, 0xb3, 0xfd, 0xa1,
-	0x7a, 0x59, 0x0d, 0xc1, 0xad, 0x25, 0x13, 0xf1, 0xb7, 0x05, 0xa3, 0x75, 0x6b, 0xb0, 0xdc, 0xac,
-	0xf1, 0x16, 0xf0, 0x9e, 0x55, 0xca, 0x65, 0xf5, 0x65, 0x2a, 0x9e, 0xf6, 0x43, 0x74, 0x44, 0x88,
-	0x7f, 0xd3, 0x91, 0x01, 0x5e, 0xc3, 0xf8, 0xa9, 0x11, 0x69, 0x4a, 0x98, 0xfe, 0x73, 0x43, 0x78,
-	0xd2, 0x27, 0x74, 0xcd, 0x64, 0xf0, 0x36, 0xd4, 0xff, 0xfc, 0xea, 0x37, 0x00, 0x00, 0xff, 0xff,
-	0x6c, 0xfc, 0xea, 0xd7, 0x09, 0x02, 0x00, 0x00,
+	// 310 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x52, 0x4f, 0x4b, 0xfb, 0x40,
+	0x14, 0x6c, 0xb6, 0x4d, 0x69, 0x5e, 0xfb, 0xfb, 0x51, 0x9e, 0x62, 0x43, 0x11, 0x29, 0x7b, 0xaa,
+	0xa0, 0x3d, 0x54, 0xaf, 0x8a, 0xad, 0x15, 0xcd, 0xc9, 0x12, 0xf5, 0x2c, 0x2b, 0x5d, 0x74, 0x69,
+	0xfe, 0xb1, 0x9b, 0x08, 0x7e, 0x4c, 0xbf, 0x91, 0xec, 0xe6, 0x5f, 0x83, 0xf6, 0xf6, 0xde, 0xcc,
+	0x9b, 0x99, 0x64, 0x12, 0x40, 0x11, 0xa5, 0x5c, 0x46, 0x2c, 0x78, 0x65, 0x89, 0x98, 0x25, 0x32,
+	0x4e, 0x63, 0x1c, 0xec, 0x62, 0xf4, 0x14, 0x9c, 0x45, 0x96, 0x7e, 0x3c, 0xc7, 0x5b, 0x1e, 0xe1,
+	0x31, 0x38, 0xac, 0x5c, 0x5c, 0x6b, 0x62, 0x4d, 0x1d, 0xbf, 0x06, 0xe8, 0x0d, 0x74, 0x5e, 0x14,
+	0x97, 0xf8, 0x1f, 0x88, 0xb7, 0x2a, 0x68, 0xe2, 0xad, 0xf0, 0x10, 0x6c, 0x1e, 0x32, 0x11, 0xb8,
+	0xc4, 0x40, 0xf9, 0x82, 0x08, 0x9d, 0x88, 0x85, 0xdc, 0x6d, 0x1b, 0xd0, 0xcc, 0xf4, 0x1c, 0xec,
+	0x3b, 0x29, 0x63, 0xa9, 0x49, 0xa1, 0x1e, 0xb7, 0xc6, 0xa4, 0xe7, 0x9b, 0x19, 0x87, 0xd0, 0x0e,
+	0xd5, 0x7b, 0x61, 0xa2, 0x47, 0x7a, 0x09, 0x3d, 0x1d, 0xb8, 0x96, 0x71, 0x52, 0xd9, 0x59, 0xb5,
+	0x9d, 0x0e, 0xfe, 0x64, 0x41, 0xc6, 0xcb, 0x60, 0xb3, 0x50, 0x05, 0x4e, 0xa9, 0x52, 0x38, 0x04,
+	0x22, 0x36, 0xb9, 0xe8, 0xa1, 0xe5, 0x13, 0xb1, 0xc1, 0x93, 0xdd, 0x77, 0x24, 0x05, 0x51, 0x43,
+	0x78, 0x06, 0x76, 0xa2, 0xa5, 0xae, 0x3d, 0x69, 0x4f, 0xfb, 0xf3, 0xa3, 0x59, 0xa3, 0xc2, 0xd2,
+	0xd9, 0xcf, 0x8f, 0x96, 0x5d, 0xe8, 0x64, 0x8a, 0xcb, 0xf9, 0xb7, 0x05, 0x7d, 0xaf, 0x38, 0x5c,
+	0xac, 0x3d, 0xbc, 0x05, 0xbc, 0xe7, 0xa9, 0xbe, 0x5e, 0x7e, 0xd5, 0xfd, 0x8e, 0x9a, 0x66, 0x15,
+	0x31, 0xc6, 0xdf, 0x29, 0xb4, 0x85, 0x57, 0xf0, 0xaf, 0x32, 0x31, 0x25, 0xec, 0x79, 0x98, 0x3d,
+	0xf2, 0x6b, 0x18, 0x3c, 0xe5, 0xf2, 0xbc, 0x8b, 0xd1, 0xdf, 0x6a, 0x35, 0x3e, 0x68, 0x12, 0xe6,
+	0x13, 0xd1, 0xd6, 0x5b, 0xd7, 0xfc, 0x2f, 0x17, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x98, 0x45,
+	0x2e, 0x29, 0x45, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -346,6 +347,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type InternalAPIClient interface {
 	GetUserByAuthToken(ctx context.Context, in *AuthToken, opts ...grpc.CallOption) (*User, error)
+	GetUserByProp(ctx context.Context, in *UserProp, opts ...grpc.CallOption) (*User, error)
 	SetUserProps(ctx context.Context, in *UserProps, opts ...grpc.CallOption) (*Error, error)
 }
 
@@ -366,6 +368,15 @@ func (c *internalAPIClient) GetUserByAuthToken(ctx context.Context, in *AuthToke
 	return out, nil
 }
 
+func (c *internalAPIClient) GetUserByProp(ctx context.Context, in *UserProp, opts ...grpc.CallOption) (*User, error) {
+	out := new(User)
+	err := c.cc.Invoke(ctx, "/internal_api.InternalAPI/GetUserByProp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *internalAPIClient) SetUserProps(ctx context.Context, in *UserProps, opts ...grpc.CallOption) (*Error, error) {
 	out := new(Error)
 	err := c.cc.Invoke(ctx, "/internal_api.InternalAPI/SetUserProps", in, out, opts...)
@@ -378,6 +389,7 @@ func (c *internalAPIClient) SetUserProps(ctx context.Context, in *UserProps, opt
 // InternalAPIServer is the server API for InternalAPI service.
 type InternalAPIServer interface {
 	GetUserByAuthToken(context.Context, *AuthToken) (*User, error)
+	GetUserByProp(context.Context, *UserProp) (*User, error)
 	SetUserProps(context.Context, *UserProps) (*Error, error)
 }
 
@@ -387,6 +399,9 @@ type UnimplementedInternalAPIServer struct {
 
 func (*UnimplementedInternalAPIServer) GetUserByAuthToken(ctx context.Context, req *AuthToken) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByAuthToken not implemented")
+}
+func (*UnimplementedInternalAPIServer) GetUserByProp(ctx context.Context, req *UserProp) (*User, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByProp not implemented")
 }
 func (*UnimplementedInternalAPIServer) SetUserProps(ctx context.Context, req *UserProps) (*Error, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetUserProps not implemented")
@@ -410,6 +425,24 @@ func _InternalAPI_GetUserByAuthToken_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InternalAPIServer).GetUserByAuthToken(ctx, req.(*AuthToken))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InternalAPI_GetUserByProp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserProp)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InternalAPIServer).GetUserByProp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/internal_api.InternalAPI/GetUserByProp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InternalAPIServer).GetUserByProp(ctx, req.(*UserProp))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -439,6 +472,10 @@ var _InternalAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserByAuthToken",
 			Handler:    _InternalAPI_GetUserByAuthToken_Handler,
+		},
+		{
+			MethodName: "GetUserByProp",
+			Handler:    _InternalAPI_GetUserByProp_Handler,
 		},
 		{
 			MethodName: "SetUserProps",
